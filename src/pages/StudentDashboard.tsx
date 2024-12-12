@@ -1,7 +1,11 @@
 import React from "react";
 import BaseLayout from "../layouts/BaseLayout";
 
-const StudentDashboard: React.FC = () => {
+interface StudentDashboardProps {
+  token: string | null;
+}
+
+const StudentDashboard: React.FC<StudentDashboardProps> = ({token}) => {
   return <BaseLayout />;
 };
 
