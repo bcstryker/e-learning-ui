@@ -1,6 +1,10 @@
 import React from "react";
 
-const AdminDashboard: React.FC = () => {
+interface AdminDashboardProps {
+  // token: string | null;
+}
+
+const AdminDashboard: React.FC<AdminDashboardProps> = () => {
   return (
     <div className="p-6">
       <h1 className="text-2xl font-bold mb-4">Welcome to the Admin Dashboard</h1>

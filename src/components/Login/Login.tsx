@@ -4,6 +4,8 @@ interface LoginProps {
   setToken: (token: string) => void;
 }
 
+const DEBUG = process.env.NODE_ENV === "development";
+
 const Login: React.FC<LoginProps> = ({setToken}) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -11,6 +13,7 @@ const Login: React.FC<LoginProps> = ({setToken}) => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
+      if (DEBUG) console.log("Logging in with email:", email, "and password:", password);
       const response = await fetch(`https://${process.env.REACT_APP_API_URI_BASE}/api/auth`, {
         method: "POST",
         headers: {
@@ -20,6 +23,7 @@ const Login: React.FC<LoginProps> = ({setToken}) => {
       });
 
       if (!response.ok) {
+        if (DEBUG) console.error("Failed to log in");
         throw new Error("Failed to log in");
       }
 
