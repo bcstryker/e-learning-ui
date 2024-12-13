@@ -190,3 +190,25 @@ export const getSections = async (courseCode: string): Promise<any[] | undefined
     return undefined;
   }
 };
+
+// ----- COURSES ENDPOINT -----
+
+// Get all courses
+export const getCourses = async (): Promise<any[] | undefined> => {
+  try {
+    const token = localStorage.getItem("token");
+    if (!token) throw new Error("No token found");
+
+    const response = await fetch(`${API_BASE_URL}/api/courses`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    console.log("Response: ", response);
+    if (!response.ok) throw new Error("Failed to fetch courses");
+    return await response.json();
+  } catch (error) {
+    console.error("Error fetching courses:", error);
+    return undefined;
+  }
+};

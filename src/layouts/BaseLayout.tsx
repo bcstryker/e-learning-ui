@@ -1,12 +1,12 @@
 // /src/layouts/BaseLayout.tsx
 import React, {ReactNode, useEffect, useState} from "react";
-import {getSections, getQuestions} from "../services/apiService";
+import {getSections, getQuestions, getCourses} from "../services/apiService";
 import Header from "../components/Layout/Header";
 import Sidebar from "../components/Layout/Sidebar";
 import MainContent from "../components/Layout/MainContent";
 import Footer from "../components/Layout/Footer";
-import {jwtDecode} from "jwt-decode";
-import {JwtPayload} from "../types";
+// import {jwtDecode} from "jwt-decode";
+// import {JwtPayload} from "../types";
 import {getDecodedToken} from "../utils/token";
 
 interface BaseLayoutProps {
@@ -19,40 +19,48 @@ const BaseLayout: React.FC<BaseLayoutProps> = ({children}) => {
   const [sections, setSections] = useState<any[]>([]);
   const [selectedSection, setSelectedSection] = useState<string | null>(null);
   const [questions, setQuestions] = useState<any[]>([]);
+  const [defaultCourseCode, setDefaultCourseCode] = useState<string | null>("DEVOPS");
 
   useEffect(() => {
-    const token = getDecodedToken();
-    if (token && token.courses) {
-    }
-    if (token) {
+    async function loadCourses() {
       try {
-        const decoded: JwtPayload = jwtDecode(token);
-        setCourses(decoded.courses);
+        const courses = await getCourses();
+        console.log("User courses: ", courses);
+        if (courses && courses.length > 0) {
+          setCourses(courses);
+          setDefaultCourseCode(courses[0].courseCode);
+        } else {
+          setCourses([]);
+        }
       } catch (error) {
-        console.error("Error decoding token:", error);
+        console.error("Error loading courses:", error);
       }
     }
+    loadCourses();
   }, []);
-  console.log(courses);
-  // TODO: Replace with logic to get an actual course code from user context or state
-  const defaultCourseCode = "DEVOPS";
 
   useEffect(() => {
     async function loadSections() {
-      try {
-        const secs = await getSections(defaultCourseCode);
-        if (secs && secs.length > 0) {
-          setSections(secs);
-          setSelectedSection(secs[0].sectionId); // Automatically select first section
-        } else {
-          setSections([]);
+      if (defaultCourseCode) {
+        try {
+          const secs = await getSections(defaultCourseCode);
+          if (secs && secs.length > 0) {
+            setSections(secs);
+            setSelectedSection(secs[0].sectionId); // Automatically select first section
+          } else {
+            setSections([]);
+          }
+        } catch (error) {
+          console.error("Error loading sections:", error);
         }
-      } catch (error) {
-        console.error("Error loading sections:", error);
       }
     }
     loadSections();
   }, [defaultCourseCode]);
+
+  useEffect(() => {
+    console.log("Course Sections: ", sections);
+  }, [sections]);
 
   useEffect(() => {
     async function loadQuestions() {
