@@ -177,7 +177,7 @@ export const getSections = async (courseCode: string): Promise<any[] | undefined
     const token = localStorage.getItem("token");
     if (!token) throw new Error("No token found");
 
-    const response = await fetch(`${API_BASE_URL}/api/sections/${encodeURIComponent(courseCode)}`, {
+    const response = await fetch(`${API_BASE_URL}/api/courses/${encodeURIComponent(courseCode)}/sections`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
