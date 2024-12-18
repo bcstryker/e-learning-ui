@@ -1,0 +1,45 @@
+import React from "react";
+
+interface SectionCardProps {
+  section: any;
+  selectedSection: string | null;
+  setSelectedSection: (sectionId: string) => void;
+  sidebarOpen: boolean;
+}
+
+const SectionCard = ({section, selectedSection, setSelectedSection, sidebarOpen}: SectionCardProps) => {
+  const isSelected = selectedSection === section.sectionId;
+
+  return (
+    <button
+      onClick={() => setSelectedSection(section.sectionId)}
+      className={`w-full text-left px-4 py-2 rounded hover:bg-gray-200 ${isSelected ? "bg-gray-300" : "bg-gray-100"}`}
+      style={{
+        height: "80px", // Standard card height for consistency
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "flex-start",
+        whiteSpace: "normal", // Allow text to wrap
+        textAlign: "left",
+      }}
+    >
+      {sidebarOpen ? (
+        <span
+          className="text-ellipsis overflow-hidden"
+          style={{
+            display: "-webkit-box",
+            WebkitLineClamp: 2, // Truncate to 2 lines
+            WebkitBoxOrient: "vertical",
+            wordWrap: "break-word", // Ensure words break within the box
+          }}
+        >
+          {section.title}
+        </span>
+      ) : (
+        <span>{section.title.charAt(0)}</span>
+      )}
+    </button>
+  );
+};
+
+export default SectionCard;
