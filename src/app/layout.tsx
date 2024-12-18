@@ -1,7 +1,7 @@
 import {ReactNode} from "react";
 import {AuthProvider} from "@/context/AuthContext";
 import Header from "@/components/Layout/Header";
-import Sidebar from "@/components/Layout/Sidebar";
+// import Sidebar from "@/components/Layout/Sidebar";
 import Footer from "@/components/Layout/Footer";
 import "./globals.css";
 
@@ -12,7 +12,6 @@ export default function RootLayout({children}: {children: ReactNode}) {
         <AuthProvider>
           <Header />
           <div className="flex flex-grow">
-            <Sidebar />
             <main className="flex-grow">{children}</main>
           </div>
           <Footer />
