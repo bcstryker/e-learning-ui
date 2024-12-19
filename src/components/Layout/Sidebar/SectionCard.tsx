@@ -1,7 +1,7 @@
-import {Section} from "@/types";
+import {ISection} from "@/types";
 
 interface SectionCardProps {
-  section: Section;
+  section: ISection;
   selectedSection: string | null;
   setSelectedSection: (sectionId: string) => void;
   sidebarOpen: boolean;
@@ -17,52 +17,45 @@ const SectionCard = ({
   isExpanded,
   onToggleExpand,
 }: SectionCardProps) => {
-  const isSelected = selectedSection === section.sectionId;
+  const isSelected = selectedSection === section._id;
 
   return (
-    <div className={`w-full rounded bg-gray-100 ${isExpanded ? "shadow-md" : ""} transition-all`}>
+    <div className={`w-full rounded bg-gray-100 ${isExpanded ? "shadow-md" : ""} transition-all duration-200`}>
       {/* Main Card */}
       <button
         onClick={() => {
-          setSelectedSection(section.sectionId); // Update selected section
-          onToggleExpand(section.sectionId); // Update expanded state
+          setSelectedSection(section._id); // Use _id for consistency
+          onToggleExpand(section._id);
         }}
-        className={`w-full text-left px-4 py-2 rounded hover:bg-gray-200 ${isSelected ? "bg-gray-300" : "bg-gray-100"}`}
-        style={{
-          height: "80px",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "flex-start",
-          whiteSpace: "normal",
-          textAlign: "left",
-        }}
+        className={`w-full text-left px-4 py-2 rounded hover:bg-gray-200 ${
+          isSelected ? "bg-gray-200 font-semibold" : "bg-gray-100"
+        } flex items-center justify-start whitespace-normal text-ellipsis text-gray-800`}
       >
         {sidebarOpen ? (
-          <span
-            className="text-ellipsis overflow-hidden"
-            style={{
-              display: "-webkit-box",
-              WebkitLineClamp: 2,
-              WebkitBoxOrient: "vertical",
-              wordWrap: "break-word",
-            }}
-          >
-            {section.title}
-          </span>
+          <span className="overflow-hidden line-clamp-2">{section.title}</span>
         ) : (
           <span>{section.title.charAt(0)}</span>
         )}
       </button>
 
       {/* Expanded Options */}
-      {isExpanded && (
-        <div className="bg-gray-200 mt-2 rounded p-2 space-y-2">
-          <button className="w-full text-left px-2 py-1 rounded hover:bg-gray-300">Lesson Summary</button>
-          <button className="w-full text-left px-2 py-1 rounded hover:bg-gray-300">Quiz</button>
-          <button className="w-full text-left px-2 py-1 rounded hover:bg-gray-300">Flashcards</button>
-          <button className="w-full text-left px-2 py-1 rounded hover:bg-gray-300">Experiment</button>
-        </div>
-      )}
+      <div
+        className={`overflow-hidden transition-all duration-300`}
+        style={{
+          maxHeight: isExpanded ? "500px" : "0px", // Set a reasonable max height for expanded state
+        }}
+      >
+        {isExpanded && (
+          <div className="bg-gray-200 rounded p-2 space-y-2">
+            <button className="w-full text-left px-2 py-1 rounded hover:bg-gray-300 text-gray-800">
+              Lesson Summary
+            </button>
+            <button className="w-full text-left px-2 py-1 rounded hover:bg-gray-300 text-gray-800">Quiz</button>
+            <button className="w-full text-left px-2 py-1 rounded hover:bg-gray-300 text-gray-800">Flashcards</button>
+            <button className="w-full text-left px-2 py-1 rounded hover:bg-gray-300 text-gray-800">Experiment</button>
+          </div>
+        )}
+      </div>
     </div>
   );
 };

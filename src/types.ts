@@ -1,25 +1,35 @@
-// Question type
-export interface Question {
+import {Types} from "mongoose";
+
+export interface IUser {
+  name: string;
+  email: string;
+  password: string;
+  role: "student" | "admin";
+  courses: Array<{
+    courseId: Types.ObjectId;
+    code: string;
+  }>;
+}
+export interface IQuestion {
   _id: string;
   questionText: string;
   options: string[];
   correctAnswer: string;
-  explanation?: string; // Optional field
+  explanation?: string;
 }
 
-// Section type
-export interface Section {
+export interface ISection {
+  _id: string;
   sectionId: string;
   title: string;
-  description?: string; // Optional field
+  description?: string;
 }
 
-// Course type
-export interface Course {
+export interface ICourse {
   courseId: string;
   title: string;
   description: string;
-  sections: Section[]; // Array of sections
+  sections: ISection[];
 }
 
 export interface JwtPayload {

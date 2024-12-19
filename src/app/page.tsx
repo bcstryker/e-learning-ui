@@ -1,11 +1,39 @@
-// src/app/page.tsx
 "use client";
 
+import ContentContainer from "@/components/Layout/MainContent";
 import Sidebar from "@/components/Layout/Sidebar";
 import {useAuth} from "@/context/AuthContext";
+import {ISection} from "@/types";
+import {useEffect, useState} from "react";
 
 export default function Home() {
-  const {token, role} = useAuth();
+  const {token} = useAuth();
+  const courseCode = "DEVOPS";
+
+  const [sections, setSections] = useState<ISection[]>([]);
+
+  useEffect(() => {
+    const fetchSections = async () => {
+      try {
+        const response = await fetch(`/api/sections?courseCode=${courseCode}`, {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        });
+
+        if (!response.ok) {
+          throw new Error("Failed to fetch sections");
+        }
+
+        const data = await response.json();
+        setSections(data);
+      } catch (err) {
+        console.error("Error fetching sections:", err);
+      }
+    };
+
+    fetchSections();
+  }, [courseCode]);
 
   if (!token) {
     return (
@@ -19,12 +47,9 @@ export default function Home() {
   }
 
   return (
-    <div className="flex">
-      <Sidebar />
-      <div className="flex-grow p-4">
-        <h1 className="text-2xl font-bold mb-4">Welcome, {role || "User"}!</h1>
-        <p>This is the main application area.</p>
-      </div>
+    <div className="flex h-full overflow-y-hidden">
+      <Sidebar sections={sections} />
+      <ContentContainer />
     </div>
   );
 }
