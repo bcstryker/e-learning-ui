@@ -1,4 +1,4 @@
-const mongoose = require("mongoose");
+import mongoose from 'mongoose';
 
 const QuestionSchema = new mongoose.Schema({
   _id: { type: String, required: true },

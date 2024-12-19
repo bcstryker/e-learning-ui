@@ -35,6 +35,6 @@ export interface ICourse {
 export interface JwtPayload {
   role: string;
   email: string;
-  courses: Course[];
+  courses: ICourse[];
   exp?: number;
 }
